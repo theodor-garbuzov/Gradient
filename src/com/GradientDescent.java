@@ -51,7 +51,7 @@ public class GradientDescent {
             step /= 2;
             System.arraycopy(VectorSum(x, NumberVectorMult(-step, grad)), 0, x_new, 0, x_new.length);
             exitCondition1 = function.f(x_new) - function.f(x) < -eps * norm2(grad) * step;
-            exitCondition2 = Math.abs(-eps * norm2(grad) * step) < Math.pow(10, -10);
+            exitCondition2 = Math.abs(-eps * norm2(grad) * step) < Math.pow(10, -15);
         } while (!exitCondition1 && !exitCondition2);
     }
 

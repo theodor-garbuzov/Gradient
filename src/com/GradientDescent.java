@@ -7,20 +7,24 @@ public class GradientDescent {
      * @param x - start point, at the end it will be optimum point
      * @param function - function to optimize
      * @param gradient - function's gradient
-     * @param eps - accuracy
-     * @return - number of method iterations
+     * @param eps - exit parameter
+     * @param eps2 - exit parameter of one-dimensional optimization
+     * @return iCount -  number of method iterations
      */
-    public static int Optimize(double[] x, Function function, Gradient gradient, double eps)
+    public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2)
     {
         double[] x_new = new double[x.length];
         double[] grad = gradient.gradf(x);
         int iCount = 0;
 
+        //System.out.print("0-й шаг. Градиент: "); System.out.println(norm2(grad));
+        //System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
         while (norm2(grad) > eps) {
-            GetNewPointDichotomy(x, grad, x_new, function, eps);
+            GetNewPointDichotomy(x, grad, x_new, function, eps2);
             System.arraycopy(x_new, 0, x, 0, x_new.length);
             grad = gradient.gradf(x);
             iCount++;
+            //System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
             //System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
         }
         return iCount;
@@ -28,7 +32,7 @@ public class GradientDescent {
 
     private static void GetNewPointDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps)
     {
-        double left = 0, right = 10; // начальный интервал неопределённости шага
+        double left = 0, right = 5; // начальный интервал неопределённости шага
         double step1, step2, step;
         double delta = eps / 20;
 
@@ -90,7 +94,7 @@ public class GradientDescent {
     /**
      * Norm of vector squared
      * @param vect - vector
-     * @return norm of vector
+     * @return norm of vector squared
      */
     private static double norm2(double[] vect)
     {

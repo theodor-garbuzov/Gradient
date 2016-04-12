@@ -15,21 +15,34 @@ public class GradientDescent {
     public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2) {
         double[] x_new = new double[x.length];
         double[] grad = gradient.gradf(x);
-        double[] x1 = new double[x.length], x2 = new double[x.length];
+        double[] x1 = new double[x.length], x2 = new double[x.length]; // step vectors
         int iCount = 0;
-        //System.out.print("0-й шаг. Градиент: "); System.out.println(norm2(grad));
-        //System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
+
+        /*System.out.print("0-й шаг. Градиент: "); System.out.println(norm2(grad));
+        System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);*/
         while (norm2(grad) > eps) {
+
+            // get new point x_new
             GetNewPointDichotomy(x, grad, x_new, function, eps2);
+
+            // x2 = x1
             System.arraycopy(x1, 0, x2, 0, x.length);
+
+            // x1 = x_new - x
             x1 = VectorSum(x_new, NumberVectorMult(-1, x));
+
+            // print x1 * x2
             if (iCount > 0)
-                System.out.println(VectorVectorMult(x1, x2));
+                System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal
+
+            // x = x_new
             System.arraycopy(x_new, 0, x, 0, x_new.length);
+
             grad = gradient.gradf(x);
             iCount++;
-            //System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
-            //System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
+
+            /*System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
+            System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);*/
         }
         return iCount;
     }

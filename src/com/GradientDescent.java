@@ -8,19 +8,22 @@ public class GradientDescent {
      * @param function - function to optimize
      * @param gradient - function's gradient
      * @param eps - accuracy
+     * @return - number of method iterations
      */
-    public static void Optimize(double[] x, Function function, Gradient gradient, double eps)
+    public static int Optimize(double[] x, Function function, Gradient gradient, double eps)
     {
         double[] x_new = new double[x.length];
         double[] grad = gradient.gradf(x);
+        int iCount = 0;
 
         while (norm2(grad) > eps) {
             GetNewPointDichotomy(x, grad, x_new, function, eps);
             System.arraycopy(x_new, 0, x, 0, x_new.length);
             grad = gradient.gradf(x);
+            iCount++;
             //System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
         }
-
+        return iCount;
     }
 
     private static void GetNewPointDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps)

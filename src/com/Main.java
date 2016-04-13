@@ -3,8 +3,8 @@ package com;
 public class Main {
 
     public static void main(String[] args) {
-        double[] x0 = new double[]{0, 0}; // start point
-        double[] x = new double[]{0, 0};
+        double[] x0 = new double[]{2, 1}; // start point
+        double[] x = new double[]{2, 1};
         int iCount;
         double eps; // exit parameter of gradient method
         double eps2; // parameter of one-dimensional optimization

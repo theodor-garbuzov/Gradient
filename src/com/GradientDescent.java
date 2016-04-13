@@ -32,8 +32,8 @@ public class GradientDescent {
             x1 = VectorSum(x_new, NumberVectorMult(-1, x));
 
             // print x1 * x2
-            if (iCount > 0)
-                System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal
+            /*if (iCount > 0)
+                System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal*/
 
             // x = x_new
             System.arraycopy(x_new, 0, x, 0, x_new.length);

@@ -14,8 +14,8 @@ public class FunctionSet {
     }
     public static double[] gradf(double[] x)
     {
-        double g1 = 2*x[0] + b*Math.exp(b*x[0]) - 1;
-        double g2 = 2*a*x[1] + c*Math.exp(c*x[1]) + 2;
+        double g1 = 2*x[0] + b*Math.exp(b*x[0] + c*x[1]) - 1;
+        double g2 = 2*a*x[1] + c*Math.exp(b*x[0] + c*x[1]) + 2;
         return new double[]{g1, g2};
     }
 

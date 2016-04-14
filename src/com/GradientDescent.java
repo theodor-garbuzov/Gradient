@@ -32,8 +32,10 @@ public class GradientDescent {
             x1 = VectorSum(x_new, NumberVectorMult(-1, x));
 
             // print x1 * x2
-            /*if (iCount > 0)
-                System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal*/
+            if (iCount > 0) {
+                System.out.print("(x_{k+1} - x_k) * (x_k - x_{k-1}) = ");
+                System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal
+            }
 
             // x = x_new
             System.arraycopy(x_new, 0, x, 0, x_new.length);
@@ -54,7 +56,7 @@ public class GradientDescent {
         while (right - left > eps) {
             step1 = (left + right) / 2 - delta;
             step2 = (left + right) / 2 + delta;
-            if (function.f(VectorSum(x, NumberVectorMult(-step1, grad))) > function.f(VectorSum(x, NumberVectorMult(-step1, grad))))
+            if (function.f(VectorSum(x, NumberVectorMult(-step1, grad))) > function.f(VectorSum(x, NumberVectorMult(-step2, grad))))
                 left = step1;
             else
                 right = step2;

@@ -12,36 +12,34 @@ public class GradientDescent {
      * @param eps2     - exit parameter of one-dimensional optimization
      * @return iCount -  number of method iterations
      */
-    public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2) {
+    public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2, Integer fCount) {
         double[] x_new = new double[x.length];
         double[] grad = gradient.gradf(x);
         double[] x1 = new double[x.length], x2 = new double[x.length]; // step vectors
+        double step;
         int iCount = 0;
-
-        /*System.out.print("0-й шаг. Градиент: "); System.out.println(norm2(grad));
-        System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);*/
+        
         while (norm2(grad) > eps) {
-
-            // get new point x_new
-            GetNewPointDichotomy(x, grad, x_new, function, eps2);
-
+            // get new point x_new = x - step * grad
+            step = GetNewStepDichotomy(x, grad, x_new, function, eps2);
+            System.arraycopy(VectorSum(x, NumberVectorMult(-step, grad)), 0, x_new, 0, x_new.length);
+            
             // x2 = x1
-            System.arraycopy(x1, 0, x2, 0, x.length);
-
             // x1 = x_new - x
+            System.arraycopy(x1, 0, x2, 0, x.length);
             x1 = VectorSum(x_new, NumberVectorMult(-1, x));
-
             // print x1 * x2
             if (iCount > 0) {
                 System.out.print("(x_{k+1} - x_k) * (x_k - x_{k-1}) = ");
                 System.out.println(VectorVectorMult(x1, x2)); // x1 and x2 have to be orthogonal
             }
-
+            
             // x = x_new
             System.arraycopy(x_new, 0, x, 0, x_new.length);
-
+            
             grad = gradient.gradf(x);
             iCount++;
+            fCount.;
 
             /*System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
             System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);*/
@@ -49,9 +47,9 @@ public class GradientDescent {
         return iCount;
     }
 
-    private static void GetNewPointDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps) {
+    private static double GetNewStepDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps) {
         double left = 0, right = 5; // начальный интервал неопределённости шага
-        double step1, step2, step;
+        double step1, step2;
         double delta = eps / 20;
         while (right - left > eps) {
             step1 = (left + right) / 2 - delta;
@@ -62,33 +60,21 @@ public class GradientDescent {
                 right = step2;
             assert (left < right);
         }
-        step = (left + right) / 2;
-        System.arraycopy(VectorSum(x, NumberVectorMult(-step, grad)), 0, x_new, 0, x_new.length);
-    }
-
-    private static void GetNewPointSplitting(double[] x, double[] grad, double[] x_new, Function function, double eps) {
-        boolean exitCondition1, exitCondition2;
-        double step = 2;
-        do {
-            step /= 2;
-            System.arraycopy(VectorSum(x, NumberVectorMult(-step, grad)), 0, x_new, 0, x_new.length);
-            exitCondition1 = function.f(x_new) - function.f(x) < -eps * norm2(grad) * step;
-            exitCondition2 = Math.abs(-eps * norm2(grad) * step) < Math.pow(10, -15);
-        } while (!exitCondition1 && !exitCondition2);
+        return (left + right) / 2;
     }
 
     /**
      * Vector sum
      *
-     * @param vect1 - vector 1
-     * @param vect2 - vector 2
+     * @param v1 - vector 1
+     * @param v2 - vector 2
      * @return result vector
      */
-    private static double[] VectorSum(double[] vect1, double[] vect2) {
-        assert (vect1.length == vect2.length);
-        double[] result = new double[vect1.length];
+    private static double[] VectorSum(double[] v1, double[] v2) {
+        assert (v1.length == v2.length);
+        double[] result = new double[v1.length];
         for (int i = 0; i < result.length; ++i)
-            result[i] = vect1[i] + vect2[i];
+            result[i] = v1[i] + v2[i];
         return result;
     }
 
@@ -96,13 +82,13 @@ public class GradientDescent {
      * Multiply vector by number
      *
      * @param num  - number
-     * @param vect - vector
+     * @param v - vector
      * @return result vector
      */
-    private static double[] NumberVectorMult(double num, double[] vect) {
-        double[] result = new double[vect.length];
+    private static double[] NumberVectorMult(double num, double[] v) {
+        double[] result = new double[v.length];
         for (int i = 0; i < result.length; ++i)
-            result[i] = num * vect[i];
+            result[i] = num * v[i];
         return result;
     }
 
@@ -123,13 +109,13 @@ public class GradientDescent {
     /**
      * Norm of vector squared
      *
-     * @param vect - vector
+     * @param v - vector
      * @return norm of vector squared
      */
-    private static double norm2(double[] vect)
+    private static double norm2(double[] v)
     {
         double res = 0;
-        for (double vectI : vect) res += vectI * vectI;
+        for (double vI : v) res += vI * vI;
         return res;
     }
 }

@@ -12,7 +12,7 @@ public class GradientDescent {
      * @param eps2     - exit parameter of one-dimensional optimization
      * @return iCount -  number of method iterations
      */
-    public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2, Integer fCount) {
+    public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps2, int[] fCount) {
         double[] x_new = new double[x.length];
         double[] grad = gradient.gradf(x);
         double[] x1 = new double[x.length], x2 = new double[x.length]; // step vectors
@@ -21,7 +21,8 @@ public class GradientDescent {
         
         while (norm2(grad) > eps) {
             // get new point x_new = x - step * grad
-            step = GetNewStepDichotomy(x, grad, x_new, function, eps2);
+            step = GetNewStepDichotomy(x, grad, x_new, function, eps2, fCount);
+            System.out.println("Шаг: " + step);
             System.arraycopy(VectorSum(x, NumberVectorMult(-step, grad)), 0, x_new, 0, x_new.length);
             
             // x2 = x1
@@ -38,22 +39,23 @@ public class GradientDescent {
             System.arraycopy(x_new, 0, x, 0, x_new.length);
             
             grad = gradient.gradf(x);
+            fCount[0] += grad.length;
             iCount++;
-            fCount.;
 
-            /*System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
-            System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);*/
+            System.out.print(iCount); System.out.print("-й шаг. Градиент: "); System.out.println(norm2(grad));
+            System.out.print(x[0]); System.out.print(" "); System.out.println(x[1]);
         }
         return iCount;
     }
 
-    private static double GetNewStepDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps) {
+    private static double GetNewStepDichotomy(double[] x, double[] grad, double[] x_new, Function function, double eps, int[] fCount) {
         double left = 0, right = 5; // начальный интервал неопределённости шага
         double step1, step2;
         double delta = eps / 20;
         while (right - left > eps) {
             step1 = (left + right) / 2 - delta;
             step2 = (left + right) / 2 + delta;
+            fCount[0] += 2;
             if (function.f(VectorSum(x, NumberVectorMult(-step1, grad))) > function.f(VectorSum(x, NumberVectorMult(-step2, grad))))
                 left = step1;
             else

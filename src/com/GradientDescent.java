@@ -12,14 +12,16 @@ public class GradientDescent {
      * @param gradient - function's gradient
      * @param eps      - exit parameter
      * @param eps1     - exit parameter of one-dimensional optimization
+     * @param fCount   - "pointer" to a number of function calculations
      * @return iteration  -  number of method iterations
      */
     public static int Optimize(double[] x, Function function, Gradient gradient, double eps, double eps1, int[] fCount) {
-        double[] x_new = new double[x.length];
-        double[] grad = gradient.gradf(x);
-        double[][] xArray = new double[10][x.length];
-        double[] step = new double[10];
+        double[] x_new = new double[x.length];          // x_{k+1}
+        double[] grad = gradient.gradf(x);              // current gradient
+        double[][] xArray = new double[10][x.length];   // vector of points
+        double[] step = new double[10];                 // vector of steps (alpha_k)
         int iteration = 0;
+
         System.arraycopy(x, 0, xArray[0], 0, x.length);
         
         while (norm2(grad) > eps) {
@@ -52,7 +54,7 @@ public class GradientDescent {
             iteration++;
 
             System.out.println("Градиент: " + norm2(grad));
-            System.out.println(x[0] + " " + x[1]);
+            System.out.println("Точка: " + x[0] + " " + x[1]);
         }
         return iteration;
     }

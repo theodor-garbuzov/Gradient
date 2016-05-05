@@ -47,6 +47,23 @@ public class VectorOperations {
     }
 
     /**
+     * Multiply vector by matrix (left: Matrix * vector)
+     *
+     * @param M - matrix
+     * @param v - vector
+     * @return result of multiplication
+     */
+    public static double[] MatrixVectorMult(double[][] M, double[] v) {
+        double[] result = new double[M.length];
+        for (int i = 0; i < M.length; ++i) {
+            result[i] = 0;
+            for (int j = 0; j < v.length; ++j)
+                result[i] += M[i][j] * v[j];
+        }
+        return result;
+    }
+
+    /**
      * Norm of vector squared
      *
      * @param v - vector
